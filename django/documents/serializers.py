@@ -3,7 +3,13 @@ from rest_framework import serializers
 
 from .models import Document
 
-class DocumentSerializer(serializers.HyperlinkedModelSerializer):
+import logging
+
+_logger = logging.getLogger(__name__)
+
+
+class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
-        fields = ('name', 'alias')
+        fields = ('name', 'text', 'file')
+

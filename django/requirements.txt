@@ -1,5 +1,9 @@
-Django==3.0
+Django>=3.0
+celery==4.4.1
+redis==3.4.1
 djangorestframework==3.11.0
 django-cors-headers==3.2.1
 uWSGI==2.0.18
 psycopg2
+easyocr
+pdf2image

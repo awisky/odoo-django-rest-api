@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
+from celery.schedules import crontab
 import os
 
 from django.utils.translation import gettext_lazy as _
@@ -129,5 +130,37 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_ROOT, "staticfiles")
 STATIC_URL = "/static/"
 
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, "mediafiles")
+MEDIA_URL = "/media/"
+
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = ()
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler", }, },
+    "root": {"handlers": ["console"], "level": "DEBUG", },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
+            "propagate": False,
+        },
+    },
+}
+
+CELERY_BROKER_URL = "redis://redis:6379"
+CELERY_RESULT_BACKEND = "redis://redis:6379"
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 120
+
+CELERY_BEAT_SCHEDULE = {
+    'documents': {
+        'task': 'documents.tasks.process_ocr',
+        'schedule': crontab(minute='*/2')
+    },
+}
