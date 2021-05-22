@@ -1,0 +1,5 @@
+Django==3.0
+djangorestframework==3.11.0
+django-cors-headers==3.2.1
+uWSGI==2.0.18
+psycopg2

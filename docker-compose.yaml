@@ -1,0 +1,45 @@
+
+version: "3.3"
+
+services:
+  nginx:
+    container_name: nginx
+    depends_on:
+      - django
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - ./django/rest/staticfiles:/static
+    networks:
+      - rest-api
+  db:
+    container_name: postgres
+    image: postgres:12
+    env_file:
+      - db.env
+    volumes:
+      - django-postgres:/var/lib/postgresql/data
+    networks:
+      - rest-api
+  django:
+    restart: always
+    container_name: django
+    image: django
+    build:
+      context: ./django
+      dockerfile: Dockerfile
+    volumes:
+      - ./django:/code
+    depends_on:
+      - db
+    env_file:
+      - db.env
+    networks:
+      - rest-api
+networks:
+  rest-api:
+volumes:
+  django-postgres:
