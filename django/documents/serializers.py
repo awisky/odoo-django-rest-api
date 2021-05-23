@@ -11,5 +11,5 @@ _logger = logging.getLogger(__name__)
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
-        fields = ('name', 'text', 'file')
-
+        fields = ('name', 'text', 'file',
+                  'ocr_processed', 'odoo_sent', 'odoo_id', 'mimetype')

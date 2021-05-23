@@ -140,11 +140,11 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "handlers": {"console": {"class": "logging.StreamHandler", }, },
-    "root": {"handlers": ["console"], "level": "DEBUG", },
+    "root": {"handlers": ["console"], "level": "INFO", },
     "loggers": {
         "django": {
             "handlers": ["console"],
-            "level": os.getenv("DJANGO_LOG_LEVEL", "DEBUG"),
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
             "propagate": False,
         },
     },
@@ -156,11 +156,15 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_TRACK_STARTED = True
-CELERY_TASK_TIME_LIMIT = 120
+CELERY_TASK_TIME_LIMIT = 60*3
 
 CELERY_BEAT_SCHEDULE = {
     'documents': {
         'task': 'documents.tasks.process_ocr',
+        'schedule': crontab(minute='*/2')
+    },
+    'odoo': {
+        'task': 'documents.tasks.process_odoo',
         'schedule': crontab(minute='*/2')
     },
 }
