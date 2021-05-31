@@ -1,0 +1,8 @@
+.DS_Store
+*.pyc
+__pycache__/
+.idea
+# compiled python files
+*.py[co]
+django/celerybeat-schedule
+migrations/

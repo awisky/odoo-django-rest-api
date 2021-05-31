@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="ocr_connector_view_tree" model="ir.ui.view">
+        <field name="name">ocr.connector.tree</field>
+        <field name="model">ocr.connector</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="user" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="ocr_connector_view_form" model="ir.ui.view">
+        <field name="name">ocr.connector.form</field>
+        <field name="model">ocr.connector</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Connector" class="oe_edit_only" />
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="user" />
+                        </group>
+                        <group>
+                            <field name="service_url" />
+                            <field name="token" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ocr_connector_action" model="ir.actions.act_window">
+        <field name="name">Connector</field>
+        <field name="res_model">ocr.connector</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new OCR Connector
+            </p>
+
+        </field>
+    </record>
+
+</odoo>

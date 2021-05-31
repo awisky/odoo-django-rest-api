@@ -1,0 +1,81 @@
+
+version: "3.3"
+
+services:
+  nginx:
+    container_name: nginx
+    depends_on:
+      - django
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - ./django/rest/staticfiles:/static
+      - ./django/rest/mediafiles:/media
+    networks:
+      - rest-api
+  db:
+    container_name: postgres
+    image: kartoza/postgis:12.1
+    env_file:
+      - db.env
+    volumes:
+      - django-postgres:/var/lib/postgresql/data
+    networks:
+      - rest-api
+  django:
+    restart: always
+    container_name: django
+    image: django
+    build:
+      context: ./django
+      dockerfile: Dockerfile
+    command: uwsgi --ini ./uwsgi/uwsgi.ini
+    volumes:
+      - ./django:/code
+    depends_on:
+      - db
+    env_file:
+      - db.env
+    networks:
+      - rest-api
+  redis:
+    image: redis:alpine
+    networks:
+      - rest-api
+  celery:
+    restart: always
+    build:
+      context: ./django
+    command: celery -A rest worker -l info -E
+    volumes:
+      - ./django:/code
+    env_file:
+      - db.env
+    depends_on:
+      - db
+      - redis
+      - django
+    networks:
+      - rest-api
+  celery-beat:
+    restart: always
+    build:
+      context: ./django
+    command: celery -A rest beat -l info
+    volumes:
+      - ./django:/code
+    env_file:
+      - db.env
+    depends_on:
+      - db
+      - redis
+      - django
+    networks:
+      - rest-api
+networks:
+  rest-api:
+volumes:
+  django-postgres:
