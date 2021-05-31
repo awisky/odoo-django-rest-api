@@ -11,7 +11,7 @@ class Document(models.Model):
     mimetype = models.CharField(max_length=60, null=True)
     ocr_processed = models.BooleanField(default=False)
 
-    #res model linked to the document
+    # res model linked to the document
     res_model = models.CharField(max_length=60, null=True)
     res_id = models.IntegerField(default=0)
 
@@ -24,14 +24,6 @@ class Document(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class OcrElement(models.Model):
-    text = models.CharField(max_length=200, blank=True, null=True)
-    document = models.ForeignKey(
-        Document, on_delete=models.CASCADE, blank=True, null=True
-    )
-    rectangle = models.PolygonField(null=True)
 
 
 class Odoo(models.Model):

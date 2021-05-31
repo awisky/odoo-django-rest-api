@@ -177,12 +177,4 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'documents.tasks.process_odoo',
         'schedule': crontab(minute='*/2')
     },
-    # 'odoo_learn': {
-    #     'task': 'documents.tasks.process_odoo_learn',
-    #     'schedule': crontab(minute='*/2')
-    # },
-    'doc_check': {
-        'task': 'documents.tasks.process_doc_check',
-        'schedule': crontab(minute='*/2')
-    },
 }
