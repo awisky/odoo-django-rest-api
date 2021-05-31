@@ -12,4 +12,7 @@ class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
         fields = ('name', 'text', 'file',
-                  'ocr_processed', 'odoo_sent', 'odoo_id', 'mimetype')
+                  'ocr_processed', 'odoo_sent', 'odoo_id', 'mimetype',
+                  'created_by')
+        extra_kwargs = {'created_by': {
+            'default': serializers.CurrentUserDefault()}}

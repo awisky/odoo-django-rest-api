@@ -18,7 +18,7 @@ services:
       - rest-api
   db:
     container_name: postgres
-    image: postgres:12
+    image: kartoza/postgis:12.1
     env_file:
       - db.env
     volumes:

@@ -8,6 +8,8 @@ FROM python:3
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
+    gdal-bin libgdal-dev \
+    python3-gdal \
     postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 

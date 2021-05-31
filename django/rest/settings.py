@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     'rest_framework',
+    'rest_framework.authtoken',
     'documents.apps.DocumentsConfig',
 ]
 
@@ -53,6 +55,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
 
 ROOT_URLCONF = 'rest.urls'
 
@@ -80,7 +88,8 @@ WSGI_APPLICATION = 'rest.wsgi.application'
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        #"ENGINE": "django.db.backends.postgresql",
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         "NAME": "rest_database",
         "USER": "rest_user",
         "PASSWORD": "rest_password",
@@ -88,6 +97,7 @@ DATABASES = {
         "PORT": 5432,
     }
 }
+
 
 
 # Password validation
@@ -156,7 +166,7 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_TRACK_STARTED = True
-CELERY_TASK_TIME_LIMIT = 60*3
+CELERY_TASK_TIME_LIMIT = 60*5
 
 CELERY_BEAT_SCHEDULE = {
     'documents': {
@@ -165,6 +175,14 @@ CELERY_BEAT_SCHEDULE = {
     },
     'odoo': {
         'task': 'documents.tasks.process_odoo',
+        'schedule': crontab(minute='*/2')
+    },
+    # 'odoo_learn': {
+    #     'task': 'documents.tasks.process_odoo_learn',
+    #     'schedule': crontab(minute='*/2')
+    # },
+    'doc_check': {
+        'task': 'documents.tasks.process_doc_check',
         'schedule': crontab(minute='*/2')
     },
 }
