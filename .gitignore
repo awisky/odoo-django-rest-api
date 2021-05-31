@@ -5,4 +5,4 @@ __pycache__/
 # compiled python files
 *.py[co]
 django/celerybeat-schedule
-django/documents/migrations
+migrations/
