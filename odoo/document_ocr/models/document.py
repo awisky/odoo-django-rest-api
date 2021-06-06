@@ -34,6 +34,11 @@ class DocumentsDocument(models.Model):
         for doc in self:
             doc.ocr_sent = False
             doc.ocr_text = ''
+            tag_ids = [
+                self.env.ref("document_ocr.documents_ocr_sent_tag").id,
+                self.env.ref("document_ocr.documents_ocr_processed_tag").id,
+            ]
+            self._remove_tags_from_document(tag_ids)
 
     def action_send(self):
         """
@@ -45,6 +50,10 @@ class DocumentsDocument(models.Model):
             response = ocr_connector.sendDocument(self)
             if response:
                 self.ocr_sent = True
+                tag_ids = [
+                    self.env.ref("document_ocr.documents_ocr_sent_tag").id,
+                ]
+                self._add_tags_to_document(tag_ids)
         else:
             raise ValidationError(_(
                 "You must define a default OCR connector "
@@ -65,3 +74,36 @@ class DocumentsDocument(models.Model):
         if documents:
             for document in documents:
                 document.action_send()
+
+    def _add_tags_to_document(self, tags):
+        """
+        This method is called to set Tags to documents.
+        :param list tags: Tags ids to be set.
+        :return: True
+        """
+        for tag in tags:
+            self.write({"tag_ids": [(4, tag.id)]})
+        return True
+
+    def _remove_tags_from_document(self, tags):
+        """
+        This method is called to remove Tags from documents.
+        :param list tags: Tags ids to be removed.
+        :return: True.
+        """
+        for tag in tags:
+            if tag in self.tag_ids.ids:
+                self.write({"tag_ids": [(3, tag.id)]})
+        return True
+
+    def write(self, vals):
+        """
+        Set Processed Tag if some text is written in the ocr_text field.
+        """
+        result = super(DocumentsDocument, self).write(vals)
+        if result.ocr_text:
+            tag_ids = [
+                self.env.ref("document_ocr.documents_ocr_processed_tag").id,
+            ]
+            self._add_tags_to_document(tag_ids)
+        return result
