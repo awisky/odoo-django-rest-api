@@ -62,7 +62,7 @@ After the docker-compose built is ready, you need to configure the Django app an
 Log in to the Django container to apply the migrations. From your terminal, run this command.
 
 ```bash
-docker exec -it Django bash
+docker exec -it django bash
 ```
 
 Run the migrations. (If something goes wrong, try **python manage.py makemigrations** first)

@@ -146,6 +146,8 @@ MEDIA_URL = "/media/"
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = ()
 
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,

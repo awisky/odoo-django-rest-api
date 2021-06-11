@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- OCR Workspace -->
+        <record id="documents_ocr_folder" model="documents.folder">
+            <field name="name">OCR</field>
+            <field name="ocr_sync">True</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <!-- Facets -->
+        <record id="ocr_documents" model="documents.facet">
+            <field name="name">Documents OCR</field>
+            <field name="sequence">1</field>
+            <field name="folder_id" ref="documents_ocr_folder"/>
+        </record>
+
+        <!-- Tags -->
+        <record id="documents_ocr_sent_tag" model="documents.tag">
+            <field name="name">Sent</field>
+            <field name="folder_id" ref="documents_ocr_folder"/>
+            <field name="facet_id" ref="ocr_documents"/>
+            <field name="sequence">5</field>
+        </record>
+
+        <record id="documents_ocr_processed_tag" model="documents.tag">
+            <field name="name">Processed</field>
+            <field name="folder_id" ref="documents_ocr_folder"/>
+            <field name="facet_id" ref="ocr_documents"/>
+            <field name="sequence">5</field>
+        </record>
+
+    </data>
+</odoo>
